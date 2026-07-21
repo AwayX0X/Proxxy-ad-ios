@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTA v20 - Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #050505;
+            overflow: hidden;
+        }
+
+        @keyframes lightningStrike {
+            0% { opacity: 0; transform: translateY(-100%); }
+            5% { opacity: 1; }
+            10% { opacity: 0; transform: translateY(100%); }
+            100% { opacity: 0; }
+        }
+
+        .lightning-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: linear-gradient(to bottom, transparent, rgba(220, 38, 38, 0.1), transparent);
+            animation: lightningStrike 4s infinite linear;
+        }
+
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid #7f1d1d;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .switch-checkbox:checked + .switch-label {
+            background-color: #dc2626;
+        }
+
+        .switch-checkbox:checked + .switch-label::after {
+            transform: translateX(1.25rem);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-white">
+
+    <div id="welcome-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-90">
+        <!-- เพิ่มรูปภาพที่นี่ -->
+        <img src="IMG_20260708_200803.jpg" alt="Profile" class="w-40 h-40 rounded-full border-4 border-red-600 mb-6 shadow-[0_0_20px_rgba(220,38,38,0.8)] object-cover animate-bounce">
+        
+        <h1 class="text-4xl md:text-6xl font-bold text-red-600 mb-6 animate-pulse text-center px-4">Login Proxy XZ9</h1>
+        
+        <!-- ส่วนใส่รหัสผ่าน -->
+        <div class="flex flex-col items-center w-full max-w-xs gap-4">
+            <input type="password" id="passwordInput" placeholder="กรุณาใส่รหัสผ่าน" class="w-full px-4 py-3 bg-black border-2 border-red-800 rounded-full text-white text-center focus:outline-none focus:border-red-500 transition-all">
+            <button onclick="checkPassword()" class="w-full px-8 py-3 bg-red-700 hover:bg-red-600 transition-all rounded-full font-bold text-lg shadow-[0_0_15px_rgba(220,38,38,0.7)]">
+                ตรวจสอบรหัสผ่าน
+            </button>
+            <p id="errorMsg" class="text-red-500 hidden font-bold">รหัสผ่านไม่ถูกต้อง!</p>
+        </div>
+        
+        <p class="text-lg text-gray-400 mt-8">คนไทยสร้าง - คุณภาพระดับสากล</p>
+    </div>
+
+    <div class="lightning-effect"></div>
+
+    <div id="main-panel" class="hidden glass-panel w-full max-w-md p-6 rounded-2xl z-10">
+        <div class="flex justify-between items-center mb-6 border-b border-red-900 pb-4">
+            <h2 class="text-3xl font-bold text-red-500">Poppy</h2>
+            <span class="text-xs text-gray-500">STATUS: ACTIVE</span>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Settings List -->
+            <div class="flex items-center justify-between">
+                <span class="text-lg">เสาอากาศ</span>
+                <input type="checkbox" id="aim40" class="hidden switch-checkbox">
+                <label for="aim40" class="w-12 h-6 bg-gray-700 rounded-full cursor-pointer relative switch-label transition-all duration-300 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform"></label>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <span class="text-lg">ขยายหัว</span>
+                <input type="checkbox" id="aim50" class="hidden switch-checkbox">
+                <label for="aim50" class="w-12 h-6 bg-gray-700 rounded-full cursor-pointer relative switch-label transition-all duration-300 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform"></label>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <span class="text-lg">ตัวโดนหัว</span>
+                <input type="checkbox" id="aim60" class="hidden switch-checkbox">
+                <label for="aim60" class="w-12 h-6 bg-gray-700 rounded-full cursor-pointer relative switch-label transition-all duration-300 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform"></label>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <span class="text-lg">hologram เรืองเเสง</span>
+                <input type="checkbox" id="nobrak" class="hidden switch-checkbox">
+                <label for="nobrak" class="w-12 h-6 bg-gray-700 rounded-full cursor-pointer relative switch-label transition-all duration-300 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform"></label>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <span class="text-lg">ขยายตัว</span>
+                <input type="checkbox" id="noban" class="hidden switch-checkbox">
+                <label for="noban" class="w-12 h-6 bg-gray-700 rounded-full cursor-pointer relative switch-label transition-all duration-300 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform"></label>
+            </div>
+        </div>
+
+        <!-- ปุ่มเริ่มเข้าเกม -->
+        <div class="mt-6">
+            <button id="injectBtn" onclick="startInjection()" class="w-full py-3 bg-red-800 hover:bg-red-700 text-white font-bold rounded-lg border-2 border-red-600 shadow-[0_0_10px_rgba(220,38,38,0.5)] transition-all">
+                เริ่มให้ไฟล์เข้าเกม
+            </button>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-red-900 text-center text-sm text-gray-500 italic">
+            Developed by Mark
+        </div>
+    </div>
+
+    <script>
+        // ฟังก์ชันตรวจสอบรหัสผ่าน
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const error = document.getElementById('errorMsg');
+            
+            // รหัสผ่านที่ตั้งไว้
+            if (input === "Dev124") {
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('main-panel').classList.remove('hidden');
+            } else {
+                error.classList.remove('hidden');
+                document.getElementById('passwordInput').value = "";
+            }
+            if (input === "Private") {
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('main-panel').classList.remove('hidden');
+            } else {
+                error.classList.remove('hidden');
+                document.getElementById('passwordInput').value = "";
+            }
+        }
+
+        // ฟังก์ชันตรวจสอบสวิตช์
+        document.querySelectorAll('.switch-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const funcName = e.target.previousElementSibling ? e.target.previousElementSibling.textContent : "Setting";
+                console.log(`${e.target.id} status: ${e.target.checked}`);
+            });
+        });
+
+        // ฟังก์ชันเริ่มเข้าเกม
+        function startInjection() {
+            const btn = document.getElementById('injectBtn');
+            btn.disabled = true;
+            btn.innerText = "กำลังดำเนินการ... (5 วินาที)";
+            
+            setTimeout(() => {
+                btn.innerText = "ลงไฟล์สำเร็จเข้าเกมเล่นได้เลย";
+                btn.classList.replace('bg-red-800', 'bg-green-700');
+                btn.classList.replace('border-red-600', 'border-green-500');
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = "เริ่มให้ไฟล์เข้าเกม";
+                    btn.classList.replace('bg-green-700', 'bg-red-800');
+                    btn.classList.replace('border-green-500', 'border-red-600');
+                }, 2000);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
