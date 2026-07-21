@@ -47,17 +47,48 @@
         .switch-checkbox:checked + .switch-label::after {
             transform: translateX(1.25rem);
         }
+
+        /* เอฟเฟกต์รูปพุ่งทะยานเข้าหน้าจอ (Jumpscare Zoom) */
+        @keyframes jumpscareZoom {
+            0% {
+                transform: scale(0.1) rotate(-15deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3.5) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .jumpscare-anim {
+            animation: jumpscareZoom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* เอฟเฟกต์สั่นหน้าจอ */
+        @keyframes screenShake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-15px, 15px) rotate(-3deg); }
+            40% { transform: translate(15px, -15px) rotate(3deg); }
+            60% { transform: translate(-10px, 10px) rotate(-1deg); }
+            80% { transform: translate(10px, -10px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .shake {
+            animation: screenShake 0.4s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen text-white">
 
+    <!-- หน้าแรก: ใส่รหัสผ่าน -->
     <div id="welcome-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-90">
-        <!-- เพิ่มรูปภาพที่นี่ -->
         <img src="IMG_20260708_200803.jpg" alt="Profile" class="w-40 h-40 rounded-full border-4 border-red-600 mb-6 shadow-[0_0_20px_rgba(220,38,38,0.8)] object-cover animate-bounce">
-        
         <h1 class="text-4xl md:text-6xl font-bold text-red-600 mb-6 animate-pulse text-center px-4">Login Proxy XZ9</h1>
         
-        <!-- ส่วนใส่รหัสผ่าน -->
         <div class="flex flex-col items-center w-full max-w-xs gap-4">
             <input type="password" id="passwordInput" placeholder="กรุณาใส่รหัสผ่าน" class="w-full px-4 py-3 bg-black border-2 border-red-800 rounded-full text-white text-center focus:outline-none focus:border-red-500 transition-all">
             <button onclick="checkPassword()" class="w-full px-8 py-3 bg-red-700 hover:bg-red-600 transition-all rounded-full font-bold text-lg shadow-[0_0_15px_rgba(220,38,38,0.7)]">
@@ -65,12 +96,25 @@
             </button>
             <p id="errorMsg" class="text-red-500 hidden font-bold">รหัสผ่านไม่ถูกต้อง!</p>
         </div>
-        
         <p class="text-lg text-gray-400 mt-8">คนไทยสร้าง - คุณภาพระดับสากล</p>
+    </div>
+
+    <!-- หน้าต่าง Jumpscare รูปพุ่งเข้าใส่ & บล็อกหน้าจอ -->
+    <div id="gameModal" class="fixed inset-0 z-50 flex items-center justify-center bg-red-950 bg-opacity-95 hidden">
+        <div id="jumpscareContainer" class="flex flex-col items-center justify-center text-center p-4">
+            <!-- รูปภาพที่จะพุ่งเข้ามาใส่หน้าจอ -->
+            <img id="scareImage" src="IMG_20260708_200803.jpg" alt="Jumpscare" class="w-48 h-48 rounded-full border-8 border-red-600 shadow-[0_0_50px_rgba(255,0,0,1)] object-cover mb-8">
+            
+            <h3 class="text-4xl font-extrabold text-white tracking-wider mb-2 animate-bounce uppercase">⚠️ ระวังตัว! ⚠️</h3>
+            <p class="text-xl text-yellow-300 font-bold bg-black/80 px-6 py-3 rounded-2xl border border-red-600 shadow-lg">
+                ล็อกหน้าจอไม่ได้! กำลังเปิดเกมอัตโนมัติ...
+            </p>
+        </div>
     </div>
 
     <div class="lightning-effect"></div>
 
+    <!-- เมนูหลัก (Panel) -->
     <div id="main-panel" class="hidden glass-panel w-full max-w-md p-6 rounded-2xl z-10">
         <div class="flex justify-between items-center mb-6 border-b border-red-900 pb-4">
             <h2 class="text-3xl font-bold text-red-500">Poppy</h2>
@@ -78,7 +122,6 @@
         </div>
 
         <div class="space-y-6">
-            <!-- Settings List -->
             <div class="flex items-center justify-between">
                 <span class="text-lg">เสาอากาศ</span>
                 <input type="checkbox" id="aim40" class="hidden switch-checkbox">
@@ -128,49 +171,52 @@
             const input = document.getElementById('passwordInput').value;
             const error = document.getElementById('errorMsg');
             
-            // รหัสผ่านที่ตั้งไว้
-            if (input === "Dev124") {
+            if (input === "Dev124" || input === "Private") {
                 document.getElementById('welcome-screen').classList.add('hidden');
                 document.getElementById('main-panel').classList.remove('hidden');
             } else {
                 error.classList.remove('hidden');
-                document.getElementById('passwordInput').value = "";
-            }
-            if (input === "Private") {
-                document.getElementById('welcome-screen').classList.add('hidden');
-                document.getElementById('main-panel').classList.remove('hidden');
-            } else {
-                error.classList.remove('hidden');
-                document.getElementById('passwordInput').value = "";
+                document.getElementById('passwordInput'].value = "";
             }
         }
 
-        // ฟังก์ชันตรวจสอบสวิตช์
-        document.querySelectorAll('.switch-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                const funcName = e.target.previousElementSibling ? e.target.previousElementSibling.textContent : "Setting";
-                console.log(`${e.target.id} status: ${e.target.checked}`);
-            });
-        });
-
-        // ฟังก์ชันเริ่มเข้าเกม
+        // ฟังก์ชันเริ่มเข้าเกม (เอฟเฟกต์ตกใจ รูปพุ่ง + สั่นมือถือ + เปิดเกมอัตโนมัติ)
         function startInjection() {
             const btn = document.getElementById('injectBtn');
+            const modal = document.getElementById('gameModal');
+            const scareImg = document.getElementById('scareImage');
+            const body = document.body;
+
             btn.disabled = true;
-            btn.innerText = "กำลังดำเนินการ... (5 วินาที)";
-            
+            btn.innerText = "กำลังเข้าเกม...";
+
+            // 1. แสดงหน้าต่าง Jumpscare และสั่นหน้าจอ
+            modal.classList.remove('hidden');
+            body.classList.add('shake');
+            scareImg.classList.add('jumpscare-anim');
+
+            // 2. สั่นมือถือ (ถ้ารองรับระบบ Vibration API ในมือถือ Android / iOS บางรุ่น)
+            if (navigator.vibrate) {
+                navigator.vibrate([300, 100, 300, 100, 500]);
+            }
+
+            // 3. ระบบพยายามเปิดเกมอัตโนมัติ (รองรับ Android Intent / iOS Custom Scheme)
             setTimeout(() => {
-                btn.innerText = "ลงไฟล์สำเร็จเข้าเกมเล่นได้เลย";
-                btn.classList.replace('bg-red-800', 'bg-green-700');
-                btn.classList.replace('border-red-600', 'border-green-500');
-                
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerText = "เริ่มให้ไฟล์เข้าเกม";
-                    btn.classList.replace('bg-green-700', 'bg-red-800');
-                    btn.classList.replace('border-green-500', 'border-red-600');
-                }, 2000);
-            }, 5000);
+                // ตัวอย่างเปิดเกม Free Fire (สามารถเปลี่ยน package หรือ scheme ได้ตามต้องการ)
+                const isAndroid = /Android/i.test(navigator.userAgent);
+                const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                if (isAndroid) {
+                    // Android Intent สำหรับเปิดแอป (เช่น Free Fire: com.dts.freefireth)
+                    window.location.href = "intent://#Intent;package=com.dts.freefireth;end;";
+                } else if (isIOS) {
+                    // iOS Custom URL Scheme
+                    window.location.href = "freefire://";
+                } else {
+                    // กรณีเปิดบนคอมพิวเตอร์หรือเบราว์เซอร์ทั่วไป
+                    alert("ระบบพยายามเปิดเกมอัตโนมัติแล้ว!");
+                }
+            }, 2500); // ดีเลย์ 2.5 วินาทีหลังจากรูปพุ่งใส่ เพื่อให้ตกใจก่อนเปิดเกม
         }
     </script>
 </body>
